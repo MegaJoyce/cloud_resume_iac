@@ -1,0 +1,40 @@
+name: Deploy Azure Function App with Terraform
+
+on:
+#   push:
+#     branches:
+#       - main
+
+jobs:
+  terraform:
+    name: Terraform Deployment
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Step 2: Setup Terraform
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.6
+
+    # Step 3: Authenticate with Azure
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CRED }}
+
+    # Step 4: Initialize Terraform
+    - name: Terraform Init
+      run: terraform init
+
+    # Step 5: Plan Terraform Execution
+    - name: Terraform Plan
+      run: terraform plan -out tfplan
+
+    # Step 6: Apply Terraform Changes
+    - name: Terraform Apply
+      run: terraform apply -auto-approve tfplan
