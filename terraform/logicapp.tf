@@ -96,6 +96,7 @@ resource "azurerm_logic_app_trigger_http_request" "httptrigger" {
 SCHEMA
 }
 
+# TODO: below resource failed. 
 resource "azurerm_logic_app_action_custom" "calloutlook" {
   name         = "calloutlook"
   logic_app_id = azurerm_logic_app_workflow.alertworkflow.id
