@@ -22,7 +22,7 @@ jobs:
           creds: ${{ secrets.AZURE_CRED }}
       
       - name: Terraform Init
-        run: terraform init -backend-config="backend.tfstate"
+        run: terraform init
       
       - name: Terraform fmt
         run: terraform fmt -check
