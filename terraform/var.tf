@@ -13,9 +13,10 @@ variable "frontend_rg" {
 variable "backend_rg" {
   type        = string
   default     = "yueheresume_api"
-  description = "The backend resource group: function, cosmodb."
+  description = "The backend resource group: function, alert."
 }
 
+# the CosmoDB is created in advance for it must stay intact no matter what happens to other resources.
 variable "cosmodb" {
   type        = string
   default     = "resumecosmodb"

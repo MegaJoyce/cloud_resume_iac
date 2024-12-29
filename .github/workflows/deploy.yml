@@ -1,40 +1,55 @@
-name: Deploy Azure Function App with Terraform
+name: Deploy Backend of Resume Project to Azure
 
 on:
-#   push:
-#     branches:
-#       - main
+  push:
+    branches: []
+
+env:
+  TFBACKENDRG_NAME: "terraform-state-rg"
+  TFBACKENDSA_NAME: "tfbackendstatesajoyce"
+  CONTAINER_NAME: "terraformstate"
+  LOCATION: "westus2"
+
 
 jobs:
-  terraform:
-    name: Terraform Deployment
+  job: 
     runs-on: ubuntu-latest
-
     steps:
-    # Step 1: Checkout the repository
-    - name: Checkout Code
-      uses: actions/checkout@v3
-
-    # Step 2: Setup Terraform
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.5.6
-
-    # Step 3: Authenticate with Azure
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CRED }}
-
-    # Step 4: Initialize Terraform
-    - name: Terraform Init
-      run: terraform init
-
-    # Step 5: Plan Terraform Execution
-    - name: Terraform Plan
-      run: terraform plan -out tfplan
-
-    # Step 6: Apply Terraform Changes
-    - name: Terraform Apply
-      run: terraform apply -auto-approve tfplan
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Terraform Installation
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.9.5'
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CRED }}
+      
+      - name: Create Backend Storage Account
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript:
+            az group create --name $TFBACKENDRG_NAME --location $LOCATION
+            az storage account create --resource-group $TFBACKENDRG_NAME --name $TFBACKENDSA_NAME --location $LOCATION --sku Standard_LRS --encryption-services blob
+            az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME
+            ACCOUNT_KEY=$(az storage account keys list --resource-group $TFBACKENDRG_NAME --account-name $TFBACKENDSA_NAME --query '[0].value' -o tsv)
+            export ARM_ACCESS_KEY=$ACCOUNT_KEY
+      
+      - name: Terraform Init
+        run: terraform init -backend-config="backend.tfstate"
+      
+      - name: Terraform fmt
+        run: terraform fmt -check
+      
+      - name: Terraform validate
+        run: terraform validate
+      
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+      
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false -parallelism=1 tfplan

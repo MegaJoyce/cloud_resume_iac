@@ -7,9 +7,13 @@
 
 # Ignore .terraform directories
 .terraform/
+.terraform*
 
 # Ignore backup files
 *.backup
 
 # Ignore log files
 *.log
+
+.github/
+resource.list
