@@ -20,7 +20,10 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CRED }}
-      
+
+      - name: Direct to working directory
+        run: cd ./terraform
+
       - name: Terraform Init
         run: terraform init
       
