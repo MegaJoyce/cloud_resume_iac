@@ -1,33 +1,3 @@
-# resource "azurerm_storage_account" "logicsa" {
-#   name                     = "logicsaforjoyce"
-#   resource_group_name      = azurerm_resource_group.logicrg.name
-#   location                 = azurerm_resource_group.logicrg.location
-#   account_tier             = "Standard"
-#   account_replication_type = "LRS"
-# }
-
-# resource "azurerm_service_plan" "AppServicePlan" {
-#   name                = "resumeserviceplan"
-#   location            = azurerm_resource_group.logicrg.location
-#   resource_group_name = azurerm_resource_group.logicrg.name
-#   os_type             = "Linux"
-#   sku_name            = "Y1"
-# }
-
-# resource "azurerm_logic_app_standard" "notifyteams" {
-#   name                       = "notifyteams"
-#   location                   = azurerm_resource_group.logicrg.location
-#   resource_group_name        = azurerm_resource_group.logicrg.name
-#   app_service_plan_id        = azurerm_service_plan.AppServicePlan.id
-#   storage_account_name       = azurerm_storage_account.logicsa.name
-#   storage_account_access_key = azurerm_storage_account.logicsa.primary_access_key
-
-#   app_settings = {
-#     "FUNCTIONS_WORKER_RUNTIME"     = "node"
-#     "WEBSITE_NODE_DEFAULT_VERSION" = "~18"
-#   }
-# }
-
 resource "azurerm_logic_app_workflow" "alertworkflow" {
   name                = "alertworkflow"
   location            = azurerm_resource_group.backend.location
@@ -136,19 +106,30 @@ resource "azurerm_logic_app_action_custom" "calloutlook" {
   "inputs": {
     "host": {
       "connection": {
-        "referenceName": "outlook"
+        "name": "@parameters('$connections')['outlook']['connectionId']"
       }
     },
     "method": "post",
     "body": {
       "To": "joyceheyue@live.com",
-      "Subject": "Alert/Terraform",
+      "Subject": "alert",
       "Body": "<p class=\"editor-paragraph\">@{triggerBody()?['data']?['essentials']?['severity']}</p><p class=\"editor-paragraph\">@{triggerBody()?['data']?['essentials']?['alertId']}<br>Successful Alerts.</p><p class=\"editor-paragraph\">Please check the Portal.</p>",
-      "Importance": "Normal"
+      "Importance": "High"
     },
     "path": "/v2/Mail"
   },
-  "runAfter": {}
+  "runAfter": {},
+  "parameters": {
+    "$connections": {
+      "value": {
+        "outlook": {
+          "id": "/subscriptions/43e47db3-18b4-4a8d-b9a7-565d9a07e57e/providers/Microsoft.Web/locations/westus2/managedApis/outlook",
+          "connectionId": "/subscriptions/43e47db3-18b4-4a8d-b9a7-565d9a07e57e/resourceGroups/testjoycehehha/providers/Microsoft.Web/connections/outlook",
+          "connectionName": "outlook"
+        }
+      }
+    }
+  }
 }
 BODY
 }

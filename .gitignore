@@ -4,6 +4,7 @@
 
 # Ignore Terraform plan files
 *.tfplan
+tfplan
 
 # Ignore .terraform directories
 .terraform/
@@ -15,5 +16,4 @@
 # Ignore log files
 *.log
 
-.github/
 resource.list

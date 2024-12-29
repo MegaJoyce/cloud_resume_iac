@@ -4,13 +4,6 @@ on:
   push:
     branches: []
 
-env:
-  TFBACKENDRG_NAME: "terraform-state-rg"
-  TFBACKENDSA_NAME: "tfbackendstatesajoyce"
-  CONTAINER_NAME: "terraformstate"
-  LOCATION: "westus2"
-
-
 jobs:
   job: 
     runs-on: ubuntu-latest
@@ -27,17 +20,6 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CRED }}
-      
-      - name: Create Backend Storage Account
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript:
-            az group create --name $TFBACKENDRG_NAME --location $LOCATION
-            az storage account create --resource-group $TFBACKENDRG_NAME --name $TFBACKENDSA_NAME --location $LOCATION --sku Standard_LRS --encryption-services blob
-            az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME
-            ACCOUNT_KEY=$(az storage account keys list --resource-group $TFBACKENDRG_NAME --account-name $TFBACKENDSA_NAME --query '[0].value' -o tsv)
-            export ARM_ACCESS_KEY=$ACCOUNT_KEY
       
       - name: Terraform Init
         run: terraform init -backend-config="backend.tfstate"

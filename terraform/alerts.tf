@@ -3,6 +3,11 @@ resource "azurerm_monitor_action_group" "action_grp" {
   resource_group_name = azurerm_resource_group.backend.name
   short_name          = "monactgrp"
 
+  email_receiver {
+    name = "Yue He"
+    email_address = "joyceheyue@live.com"
+    use_common_alert_schema = true
+  }
   logic_app_receiver {
     name                    = "logicappaction"
     resource_id             = azurerm_logic_app_workflow.alertworkflow.id
@@ -14,9 +19,9 @@ resource "azurerm_monitor_action_group" "action_grp" {
 
 resource "azurerm_monitor_metric_alert" "apiaccesscount" {
   name                = "apiaccesscount"
-  resource_group_name = azurerm_resource_group.monitorrg.name
+  resource_group_name = azurerm_resource_group.backend.name
   scopes              = [azurerm_linux_function_app.FunctionApp.id]
-  description         = "Action will be triggered when FunctionExecutionCount count is greater than 20 every minute."
+  description         = "Action will be triggered when FunctionExecutionCount is greater than 20 every minute."
 
   # these criteria are from the JSON view of the alert rule.
   criteria {

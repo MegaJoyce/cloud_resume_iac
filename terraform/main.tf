@@ -7,9 +7,9 @@ terraform {
     }
   }
   backend "azurerm" {
-    resource_group_name  = "terraform-state-rg"
-    storage_account_name = "tfbackendstatesajoyce"
+    resource_group_name  = "resume_test"
+    storage_account_name = "joyceresume"
     container_name = "terraformstate"
-    key = joyceresume.tfstate
+    key = "heyueresume.tfstate"
   }
 }

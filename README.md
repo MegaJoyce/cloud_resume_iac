@@ -36,10 +36,9 @@ Sometimes you need to set the desired state of resources in Terraform configurat
 
 Under such circumstances, I find two ways to get what I need for the configuration. could check the json view of the resources you created manually. On the blade of the target resource, you could find the JSON view button on the right top corner. Click it and then you will know the state and configuration of the resources. You could translate the JSON into HCL format. 
 
-For example, I leverage this method when I create alert rule. I look for criteria and put them in the Terraform config. Please note that some configurations are not available in `azurerm` provider. For example, the `criteriaType` is a new feature, and it is unavailable in `azurerm` provider.
+For example, I leverage this method when I create alert rule. I look for criteria and put them in the Terraform config. Please note that some configurations are not available in `azurerm` provider. For example, the `criteriaType` has `StaticThresholdCriterion`, but it is static by default in `azurerm` provider.
 ```JSON
 // resource JSON view on Portal.
-...
 "criteria": {
             "allOf": [
                 {
@@ -55,7 +54,6 @@ For example, I leverage this method when I create alert rule. I look for criteri
             ],
             "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
         },
-...
 ```
 ```hcl
 // alerts.tf:
@@ -112,12 +110,26 @@ When I dry run/`terraform plan`, I got the error saying resource does not exist.
 
 For example, the `callback_url` I used in the former topic [know-what-are-returned-after-a-resource-is-created](#know-what-are-returned-after-a-resource-is-created).
 
+### API connction for logic app workflow
+│ Error: updating Logic App Workflow Workflow (Subscription: "43e47db3-18b4-4a8d-b9a7-565d9a07e57e"
+│ Resource Group Name: "yueheresume_api"
+│ Workflow Name: "alertworkflow") for Action "calloutlook": unexpected status 400 (400 Bad Request) with error: BadRequest: The API connection name must be provided in the 'calloutlook' action inputs.
+│ information.
+
 ## Where to Improve
 ### Store the secrets in GitHub Secrets or Azure Key Vault?
 
 I have secrets like CosmoDB connection string  and Azure Credentials. I store the Azure credentials in GitHub secrets and the connection string in environment variables in the pipeline host. If I want to make the connection string more secure, I could store it in Azure Key Vault: [Set and retrieve a secret from Azure Key Vault using Azure CLI](https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-cli)
 
 No matter where you store the secrets, it is more secure than just export the connection string during the pipeline. 
+
+### Create Logic App API conncetion using Terraform
+When I create the action `Send Email via Outlook` for the logic app after it is triggered, I found it quite challenging to create the API connection through Terraform. According to [azurerm_api_connection](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/api_connection), I must access the data of an existing managed API for an API connection. However, this managed API should be created under the Azure API Management service, which is quite expensive for me. Besides, since I could only create a simple API connection on Portal, why do I have to create an extra resource with Terraform? I really don't think this is a good idea.
+
+While I was looking for solutions to this problem, I have found this module [fdmsantos/api-connections](https://registry.terraform.io/modules/fdmsantos/api-connections/azurerm/latest). It is the Office 365 API connection, and I think it is inspiring. But I did not have Office 365 so I didnot have a try. 
+
+Therefore, to workaround the problem, I manually created the API connection on Portal and decided to use it in Terraform. I wrote the body of the API connection resource aaccording to code view of the manually-created logic app. 
+
 
 ## Useful Links
 ### The use of `azurerm` provider:
@@ -128,3 +140,7 @@ No matter where you store the secrets, it is more secure than just export the co
 ### The setting of the Alert HTTP trigger:
 [Sample Alert Payload](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-payload-samples#sample-alert-payload)\
 [azurerm_logic_app_trigger_http_request - Attributes Reference](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/logic_app_trigger_http_request#attributes-reference)
+
+[Supported metrics with Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/reference/metrics-index)
+
+[How to deploy Azure API Connection through Terraform with the status 'connected'](https://stackoverflow.com/questions/75692406/how-to-deploy-azure-api-connection-through-terraform-with-the-status-connected)

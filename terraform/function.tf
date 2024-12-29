@@ -1,8 +1,3 @@
-# resource "azurerm_resource_group" "backend" {
-#   name     = var.backend_rg
-#   location = var.location
-# }
-
 resource "azurerm_storage_account" "functionsa" {
   name                     = "functionsajoyceheyue"
   resource_group_name      = azurerm_resource_group.backend.name
