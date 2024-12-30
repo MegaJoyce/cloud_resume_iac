@@ -139,8 +139,6 @@ Therefore, to workaround the problem, I manually created the API connection on P
 
 ### The setting of the Alert HTTP trigger:
 [Sample Alert Payload](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-payload-samples#sample-alert-payload)\
-[azurerm_logic_app_trigger_http_request - Attributes Reference](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/logic_app_trigger_http_request#attributes-reference)
-
-[Supported metrics with Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/reference/metrics-index)
-
+[azurerm_logic_app_trigger_http_request - Attributes Reference](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/logic_app_trigger_http_request#attributes-reference)\
+[Supported metrics with Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/reference/metrics-index)\
 [How to deploy Azure API Connection through Terraform with the status 'connected'](https://stackoverflow.com/questions/75692406/how-to-deploy-azure-api-connection-through-terraform-with-the-status-connected)

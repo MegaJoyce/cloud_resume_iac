@@ -2,7 +2,7 @@ name: Deploy Backend of Resume Project to Azure
 
 on:
   push:
-    branches: []
+    branches: [main]
 
 jobs:
   job: 
@@ -10,6 +10,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Direct to working directory
+        run: |
+          cd terraform
       
       - name: Terraform Installation
         uses: hashicorp/setup-terraform@v3
@@ -21,8 +25,6 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CRED }}
 
-      - name: Direct to working directory
-        run: cd ./terraform
 
       - name: Terraform Init
         run: terraform init
