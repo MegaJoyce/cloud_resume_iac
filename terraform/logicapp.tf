@@ -107,7 +107,9 @@ resource "azurerm_logic_app_action_custom" "calloutlook" {
   "inputs": {
     "host": {
       "connection": {
-        "name": "@parameters('$connections')['outlook']['connectionId']"
+        "name": "outlook"
+        "connectionId": ""
+        "id": ""
       }
     },
     "method": "post",
@@ -120,17 +122,6 @@ resource "azurerm_logic_app_action_custom" "calloutlook" {
     "path": "/v2/Mail"
   },
   "runAfter": {},
-  "parameters": {
-    "$connections": {
-      "value": {
-        "outlook": {
-          "id": "/subscriptions/43e47db3-18b4-4a8d-b9a7-565d9a07e57e/providers/Microsoft.Web/locations/westus2/managedApis/outlook",
-          "connectionId": "/subscriptions/43e47db3-18b4-4a8d-b9a7-565d9a07e57e/resourceGroups/testjoycehehha/providers/Microsoft.Web/connections/outlook",
-          "connectionName": "outlook"
-        }
-      }
-    }
-  }
 }
 BODY
 }
