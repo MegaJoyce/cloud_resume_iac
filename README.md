@@ -1,23 +1,23 @@
-* [Terraform - IaC in Cloud Resume Project ](#terraform---iac-in-cloud-resume-project)<br>
-  * [Built Azure Infrastructure with Terraform](#built-azure-infrastructure-with-terraform)<br>
-    * [Know what are required for the resources ](#know-what-are-required-for-the-resources)<br>
-    * [Store tfstate in remote storage](#store-tfstate-in-remote-storage)<br>
-    * [Pay attention to duplicate resources](#pay-attention-to-duplicate-resources)<br>
-    * [Where to find your desired resource state](#where-to-find-your-desired-resource-state)<br>
-    * [Know what are returned after a resource is created](#know-what-are-returned-after-a-resource-is-created)<br>
-    * [CORS: allow all origins](#cors:-allow-all-origins)<br>
-    * [Store connction string for the CosmoDB](#store-connction-string-for-the-cosmodb)<br>
-    * [Integrate Function app with GitHub repository](#integrate-function-app-with-github-repository)<br>
-    * [Data block report error when dry run](#data-block-report-error-when-dry-run)<br>
-  * [Where to Improve](#where-to-improve)<br>
-    * [Store the secrets in GitHub Secrets or Azure Key Vault](#store-the-secrets-in-github-secrets-or-azure-key-vault)<br>
-    * [Create Logic App API conncetion using Terraform](#create-logic-app-api-conncetion-using-terraform)<br>
-  * [Useful Links](#useful-links)<br>
-    * [The use of `azurerm` provider](#the-use-of-`azurerm`-provider)<br>
-    * [The setting of the Alert HTTP trigger](#the-setting-of-the-alert-http-trigger)<br>
+* [Terraform - IaC in Cloud Resume Project](#terraform---iac-in-cloud-resume-project)  
+  * [Built Azure Infrastructure with Terraform](#built-azure-infrastructure-with-terraform)  
+    * [Know what are required for the resources](#know-what-are-required-for-the-resources)  
+    * [Store tfstate in remote storage](#store-tfstate-in-remote-storage)  
+    * [Pay attention to duplicate resources](#pay-attention-to-duplicate-resources)  
+    * [Where to find your desired resource state](#where-to-find-your-desired-resource-state)  
+    * [Know what are returned after a resource is created](#know-what-are-returned-after-a-resource-is-created)  
+    * [CORS: allow all origins](#cors-allow-all-origins)  
+    * [Store connction string for the CosmoDB](#store-connction-string-for-the-cosmodb)  
+    * [Integrate Function app with GitHub repository](#integrate-function-app-with-github-repository)  
+    * [Data block report error when dry run](#data-block-report-error-when-dry-run)  
+  * [Where to Improve](#where-to-improve)  
+    * [Store the secrets in GitHub Secrets or Azure Key Vault](#store-the-secrets-in-github-secrets-or-azure-key-vault)  
+    * [Create Logic App API conncetion using Terraform](#create-logic-app-api-conncetion-using-terraform)  
+  * [Useful Links](#useful-links)  
+    * [The use of `azurerm` provider](#the-use-of-azurerm-provider)  
+    * [The setting of the Alert HTTP trigger](#the-setting-of-the-alert-http-trigger)  
 ---
-# Terraform - IaC in Cloud Resume Project 
 
+# Terraform - IaC in Cloud Resume Project 
 For the resume project, I decided to use Terraform as IaC tool. It took me a whole week to write it from scratch. I am sooo happy I did it eventually! I found the key is you must do it manually first and then you automate it using Terraform. If you are new to Terraform, I strongly recommend you create functional resources manually before you get into it. 
 
 Now I will share some tips building the resume project infrastructure using Terraform, plus where to improve next. 
